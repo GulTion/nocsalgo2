@@ -47,7 +47,6 @@ async function Post(obj, callback){
     }
   }).catch(e=>{
     // log(e.response.status)
-    log(`retry: ${obj.retry+1}`)
     Post({...obj, retry:obj.retry+1}, callback)
   })
 }
@@ -63,7 +62,7 @@ function aPost(obj){
           aPost({...obj,url:obj.url+encodeURI(_.name)+"/", parent:_.name})
 
       }else{
-
+          // sh(`cd ${location} && cd '${obj.parent}' && mkdir '${_.name}'`)
           sh(`cd ${location} && cd '${obj.parent}' && wget --retry-on-http-error=500 -nc ${obj.url+encodeURI(_.name)}`)
       }
     
