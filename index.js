@@ -47,7 +47,7 @@ async function Post(obj, callback){
     }
   }).catch(e=>{
     // log(e.response.status)
-    callback([])
+    Post(obj, callback)
   })
 }
 
@@ -57,18 +57,15 @@ function aPost(obj){
   obj,e=>{
     for(let _ of e){
       if(_.mimeType=="application/vnd.google-apps.folder"){
-          // fs.appendFileSync("data.txt",`cd "${LOC+'/'+_.name}" && mkdir "${_.name}"@@`)
-          console.log("Folder: ",_.name)
           sh(`cd ${location} && mkdir '${_.name}'`)
-        setTimeout(e=>{
-          aPost({...obj,time:obj.time+2000, url:obj.url+encodeURI(_.name)+"/", parent:_.name})
-        },obj.time)
-        // aPost({...obj, url:obj.url+encodeURI(_.name)+"/", parent:_.name})
+  
+          aPost({...obj,url:obj.url+encodeURI(_.name)+"/", parent:_.name})
+
       }else{
-        // fs.appendFileSync("data.txt",`cd "${LOC+'/'+_.name}" && wget ${obj.url+encodeURI(_.name)}@@`)
-          sh(`cd ${location} && cd '${obj.parent}' && wget -nc ${obj.url+encodeURI(_.name)}`)
-          log(obj.url+encodeURI(_.name))
+
+          sh(`cd ${location} && cd '${obj.parent}' && wget --retry-on-http-error=500 -nc ${obj.url+encodeURI(_.name)}`)
       }
+    
     }
   })
 }
