@@ -47,7 +47,8 @@ async function Post(obj, callback){
     }
   }).catch(e=>{
     // log(e.response.status)
-    Post(obj, callback)
+    log(`retry: ${obj.retry+1}`)
+    Post({...obj, retry:obj.retry+1}, callback)
   })
 }
 
@@ -85,7 +86,8 @@ aPost({
   token:null,
   index:0,
   files:[],
-  time:1000
+  time:1000,
+  retry:0
   })
 
 console.log(process.argv)
