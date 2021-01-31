@@ -6,8 +6,8 @@ const fs = require('fs');
 const URL = process.argv[2]
 
 
-const USERNAME = "GoaInquisition"
-const PASS = "GoaInquisition"
+const USERNAME = process.argv[4]
+const PASS = USERNAME
 const TOKEN = btoa(USERNAME+":"+PASS);
 const LOC1 = "/content"
 
